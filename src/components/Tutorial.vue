@@ -8,14 +8,19 @@
       </a>
       <div class="mt-8 bg-white overflow-hidden shadow sm:rounded-lg p-6">
         <h2 class="text-2xl leading-7 font-semibold">
-          Welcome to Learning App Nuxt SPA Frontend
+          Welcome to Learning App SPA!
         </h2>
         <p class="mt-3 text-gray-600">
-          The stand-alone frontend of a SaaS project with Laravel API backend.<br>
+          The frontend of Learning App, a SaaS project with Laravel API backend.<br>
         </p>
+        <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
+          <NuxtLink class="bg-gray-100 text-sm p-1 rounded border" v-if="user" to="/dashboard">Dashboard</NuxtLink>
+        <template v-else>
         <p class="mt-4 pt-4 text-gray-800 border-t border-dashed">
           To get started <NuxtLink class="bg-gray-100 text-sm p-1 rounded border" to="/login">Login</NuxtLink> or <NuxtLink class="bg-gray-100 text-sm p-1 rounded border" to="/register">Register</NuxtLink>. Have fun!
         </p>
+      </template>
+        </div>
       </div>
       <div class="flex justify-center pt-4 space-x-2">
         <a href="https://github.com/nuxt/nuxt.js" target="_blank"><svg
@@ -44,3 +49,11 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  props: {
+    user: Object,
+  }
+}
+</script>
