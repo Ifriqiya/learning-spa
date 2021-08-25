@@ -1,67 +1,61 @@
+
 <template>
-  <v-container fill-height>
-    <v-row justify="center" align="center">
-      <v-col cols="12" sm="6">
-        <v-form ref="form">
-          <v-text-field
-            v-model="form.email"
-            :counter="10"
-            label="Email"
-            color="green"
-            required
-          >
-            <v-icon slot="prepend" color="grey">
-              email
-            </v-icon>
-          </v-text-field>
-
-          <v-text-field
-            v-model="form.password"
-            label="Password"
-            type="password"
-            color="green"
-            required
-          >
-            <v-icon slot="prepend" color="grey">
-              lock
-            </v-icon>
-          </v-text-field>
-
-          <v-btn color="blue-grey" class="ml-0" @click="login">
-            Login
-          </v-btn>
-        </v-form>
-      </v-col>
-    </v-row>
-  </v-container>
+<div class="flex h-screen items-center justify-center">
+<div class="fixed top-0 right-0 px-6 py-4 sm:block">
+    <p class="mt-4 pt-4 text-gray-800 border-t border-dashed">
+        Don't have an account?<NuxtLink class="bg-gray-100 text-sm p-1 rounded border" to="/register">Register</NuxtLink>. Back To<NuxtLink class="bg-gray-100 text-sm p-1 rounded border" to="/">Home Page</NuxtLink> 
+    </p>
+</div>
+<form ref="loginform" @submit.prevent="login()" class="w-1/4 mx-auto p-4">
+    <h1 class="font-semibold mb-2 text-xl">
+        Login
+    </h1>
+    <div class="mb-4">
+        <label for="email" class="block mb-1 text-sm">Email</label>
+        <input type="email" name="email" class="w-full border rounded px-3 py-2" required />
+    </div>
+    <div class="mb-4">
+        <label for="password" class="block mb-1 text-sm">Password</label>
+        <input type="password" name="password" class="w-full border rounded px-3 py-2" required />
+    </div>
+    <button type="submit" class="bg-blue-500 text-white font-semibold py-2 px-10 w-full rounded">
+        Login
+    </button>
+</form>
+</div>
 </template>
 
 <script>
 export default {
-  name: 'Login',
-  data () {
-    return {
-      form: {
-        email: '',
-        password: ''
-      }
-    }
-  },
+    auth: false,
+    data() {
+        return {
+            error: {},
+        };
+    },
+    mounted() {
+    // Before loading login page, obtain csrf cookie from the server.
+    this.$axios.$get('/sanctum/csrf-cookie');
+    },
+    methods: {
+        async login() {
+            this.error = {};
+                try {
+                // Prepare form data
+                const formData = new FormData(this.$refs.loginform);
 
-  methods: {
-    async login () {
-       // this is managed automatically in the background
-      // await this.$axios.$get('/sanctum/csrf-cookie')
-      try {
-        let response = await this.$auth.loginWith('laravelSanctum', {
-          data: this.form
-        })
-        // console.log(response)
-        this.$router.push('/dashboard')
-      } catch (err) {
-        console.log(err)
-      }
-    }
-  }
-}
+                // Pass form data to `loginWith` function
+                await this.$auth.loginWith('laravelSanctum', { data: formData });
+
+                // Redirect user after login
+                this.$router.push({
+                    path: '/dashboard',
+                });
+                } catch (err) {
+                    this.error = err;
+                    // do something with error
+                }
+        },
+    },
+};
 </script>

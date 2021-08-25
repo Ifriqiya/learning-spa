@@ -14,7 +14,7 @@
           The frontend of Learning App, a SaaS project with Laravel API backend.<br>
         </p>
         <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
-          <NuxtLink class="bg-gray-100 text-sm p-1 rounded border" v-if="user" to="/dashboard">Dashboard</NuxtLink>
+          <NuxtLink class="bg-gray-100 text-sm p-1 rounded border" v-if="$auth.user" to="/dashboard">Dashboard</NuxtLink>
         <template v-else>
         <p class="mt-4 pt-4 text-gray-800 border-t border-dashed">
           To get started <NuxtLink class="bg-gray-100 text-sm p-1 rounded border" to="/login">Login</NuxtLink> or <NuxtLink class="bg-gray-100 text-sm p-1 rounded border" to="/register">Register</NuxtLink>. Have fun!
@@ -52,6 +52,7 @@
 
 <script>
 export default {
+  auth: false,
   props: {
     user: Object,
   }

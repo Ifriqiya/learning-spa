@@ -1,7 +1,9 @@
 <template>
-    <Login/>
-  </template>
+  <Login/>
+</template>
   
-  <script>
-  export default {}
-  </script>
+<script>
+  export default {
+    auth: false
+  }
+</script>

@@ -1,7 +1,7 @@
 <template>
-    <Dashboard/>
+    <VerifyEmail/>
 </template>
-  
+    
 <script>
     export default {}
 </script>
