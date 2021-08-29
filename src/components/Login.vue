@@ -51,7 +51,7 @@ export default {
                 })
                 } catch (err) {
                     this.error = err;
-                    // do something with error
+                    // do something with error next to do
                 }
         },
     },
