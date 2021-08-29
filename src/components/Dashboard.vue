@@ -13,7 +13,7 @@
     </div>
 </template>
 <script>
-export default {
+export default { //used nuxt auth module only, no vuex state management-add later
     layout: 'AuthLayout',
     data() {
         return {
