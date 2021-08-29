@@ -17,7 +17,9 @@
 <script>
 export default {
     props: {
-        status: String
+
+        status: String,
+        user: Object
     },
     data() {
         return {
@@ -26,7 +28,9 @@ export default {
     },
     mounted() {
     // Before loading login page, obtain csrf cookie from the server.
-    this.$axios.$get('/sanctum/csrf-cookie');
+    // Already authenticated and have cookie from register step
+        // this.$axios.$get('/sanctum/csrf-cookie');
+        this.$auth.user;
     },
     methods: {
         async resend() {
@@ -36,12 +40,14 @@ export default {
             const formData = new FormData(this.$refs.resendemailform);
 
             // Pass form data to `loginWith` function
-            await this.$auth.verificationnoticeWith('laravelSanctum', { data: formData });
+            await this.$axios.$post('api/email/verification-notification', formData);
 
-            // Redirect user after login
-            this.$router.push({
-                path: '/dashboard',
-            });
+            // User get resend response and remains on page
+            // Workflow to listen for, call verifyemail? or call is embedded in link, confirm verification (202) and redirect to dashboard if successful
+
+            // this.$router.push({
+            //     path: '/dashboard',
+            // });
             } catch (err) {
                 this.error = err;
                 // do something with error

@@ -2,7 +2,7 @@
 <div class="flex h-screen items-center justify-center">
 <div class="fixed top-0 right-0 px-6 py-4 sm:block">
     <p class="mt-4 pt-4 text-gray-800 border-t border-dashed">
-        Already registered?<NuxtLink class="bg-gray-100 text-sm p-1 rounded border" to="/login">Login</NuxtLink>. Back To<NuxtLink class="bg-gray-100 text-sm p-1 rounded border" to="/">Home Page</NuxtLink> 
+        Already registered?<NuxtLink class="bg-gray-100 text-sm p-1 rounded border" to="/login">Login</NuxtLink> Or Back To<NuxtLink class="bg-gray-100 text-sm p-1 rounded border" to="/">Home Page</NuxtLink> 
     </p>
 </div>
 <form ref="registrationform" @submit.prevent="register()" class="w-1/4 mx-auto p-4">
@@ -45,8 +45,8 @@ export default {
         };
     },
     mounted() {
-    // Before loading login page, obtain csrf cookie from the server.
-    this.$axios.$get('/sanctum/csrf-cookie');
+    // Before loading registration page, obtain csrf cookie from the server.
+        this.$axios.$get('/sanctum/csrf-cookie');
     },
     methods: {
         async register() {
@@ -54,14 +54,18 @@ export default {
             try {
             // Prepare form data
             const formData = new FormData(this.$refs.registrationform);
-
-            // Pass form data to `loginWith` function
-            await this.$auth.registerWith('laravelSanctum', { data: formData });
-
-            // Redirect user after login to dashboard (laravel handles if email not verified? or handle here?)
-            this.$router.push({
-                path: '/dashboard',
-            });
+            // Pass form data to axios call
+            await this.$axios.$post('/api/register', formData).then(res => {
+                this.$router.push({path: '/login'});
+                // if (res.status ===201) { // not working
+                //     this.$axios.$get('/api/user').then(res => {
+                //         if(res.status===401) {
+                //             this.$auth.setUser(user);
+                //             this.$router.push({path: '/verifyemail'});
+                //         }
+                //     })
+                // }
+            })
             } catch (err) {
                 this.error = err;
                 // do something with error
