@@ -49,10 +49,14 @@ export default {
       When issuing a request to baseURL that needs to pass authentication headers to
       the backend, 'credentials' should be set to 'true'
     */
-    credentials: true, // default value of withCredentials is fale
+    credentials: true, // default value of withCredentials is false
     
     // This is where to hit the server
     baseUrl: 'http://127.0.0.1:8000'
+  },
+
+  router: {
+    middleware: ['auth']
   },
 
   auth: {
@@ -60,20 +64,36 @@ export default {
         login: '/login',
         logout: '/',
         callback: '/login',
-        home: '/'
+        home: '/dashboard'
       },
+
       strategies: {
         laravelSanctum: {
         provider: 'laravel/sanctum',
         url: 'http://127.0.0.1:8000',
-        endpoints: {
-           login: { url: '/api/login', method: 'post' }
+        cookie: {
+          name: 'XSRF-TOKEN',
+          options: {
+            path: '/',
+            secure: true
+          }
         },
-        tokenRequired: false,
-        tokenType: false
+        endpoints: {
+          csrf: { url: '/sanctum/csrf-cookie', method: 'get', propertyName: false },
+          login: { url: '/api/login', method: 'post', propertyName: false },
+          register: { url: '/api/register', method: 'post', propertyName: false },
+          logout: { url: '/api/logout', method: 'post', propertyName: false },
+          verificationsend: { url: '/api/email/verification-notification', method: 'post', propertyName: false },
+          user: { url: '/api/user', method: 'get', propertyName: false }
+        },
+        token: {
+          required: false,
+          type: false
         }
-     },
-     localStorage: false
+        }
+      },
+      localStorage: false,
+      watchLoggedIn: true
    },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
