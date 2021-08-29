@@ -3,7 +3,7 @@
 <div class="flex h-screen items-center justify-center">
 <div class="fixed top-0 right-0 px-6 py-4 sm:block">
     <p class="mt-4 pt-4 text-gray-800 border-t border-dashed">
-        Don't have an account?<NuxtLink class="bg-gray-100 text-sm p-1 rounded border" to="/register">Register</NuxtLink>. Back To<NuxtLink class="bg-gray-100 text-sm p-1 rounded border" to="/">Home Page</NuxtLink> 
+        Don't have an account?<NuxtLink class="bg-gray-100 text-sm p-1 rounded border" to="/register">Register</NuxtLink> Or Back To<NuxtLink class="bg-gray-100 text-sm p-1 rounded border" to="/">Home Page</NuxtLink> 
     </p>
 </div>
 <form ref="loginform" @submit.prevent="login()" class="w-1/4 mx-auto p-4">
@@ -35,7 +35,7 @@ export default {
     },
     mounted() {
     // Before loading login page, obtain csrf cookie from the server.
-    this.$axios.$get('/sanctum/csrf-cookie');
+        this.$axios.$get('/sanctum/csrf-cookie');
     },
     methods: {
         async login() {
@@ -43,14 +43,12 @@ export default {
                 try {
                 // Prepare form data
                 const formData = new FormData(this.$refs.loginform);
-
                 // Pass form data to `loginWith` function
-                await this.$auth.loginWith('laravelSanctum', { data: formData });
-
-                // Redirect user after login
-                this.$router.push({
-                    path: '/dashboard',
-                });
+                await this.$auth.loginWith('laravelSanctum', { data: formData }).then(res => { 
+                    if (res.status===200) {
+                        this.$router.push({path: '/dashboard'});
+                    }  
+                })
                 } catch (err) {
                     this.error = err;
                     // do something with error
